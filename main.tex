@@ -1,0 +1,393 @@
+\documentclass[12pt,twoside]{article}
+
+% =====================
+% FONTS — academic sans
+% =====================
+% Use Source Sans Pro for a clean, academic sans (pdflatex/LuaLaTeX/XeLaTeX).
+% Keep Times-like math via newtxmath for professional look.
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[default]{sourcesanspro} % main text font
+\renewcommand{\familydefault}{\sfdefault} % switch body to sans
+\let\Bbbk\relax
+\usepackage{newtxmath} % Times-like math to pair with sans body
+\usepackage{microtype}
+
+% Page geometry
+\usepackage{geometry}
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm,
+    headheight=1.2cm,
+    footskip=1cm
+}
+
+% Core packages
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{abstract}
+\usepackage{authblk}
+\usepackage{hyperref}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{lineno}
+\usepackage{setspace}
+\usepackage{doi}
+\usepackage{hyphenat}
+\usepackage{float}
+
+% ORCID logos per reference
+% Load after xcolor/hyperref; the package pulls in tikz internally.
+\usepackage{orcidlink}
+
+% Brand colors
+\definecolor{cyanprimary}{RGB}{0, 150, 175}
+\definecolor{cyansecondary}{RGB}{0, 100, 125}
+\definecolor{cyanlight}{RGB}{230, 248, 252}
+\definecolor{cyangray}{RGB}{100, 100, 100}
+
+% Captions (ggplot2-friendly)
+\captionsetup{
+    font={small,sf},
+    labelfont={bf,sf,color=cyansecondary},
+    textfont={sf},
+    justification=justified,
+    singlelinecheck=false,
+    margin=10pt,
+    skip=8pt
+}
+\captionsetup[sub]{
+    font={footnotesize,sf},
+    labelfont={bf,sf,color=cyansecondary},
+    textfont={sf}
+}
+
+% Tables
+\usepackage{array}
+\usepackage{longtable}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{8pt}
+
+% Hyperref
+\hypersetup{
+    colorlinks=true,
+    linkcolor=cyanprimary,
+    citecolor=cyanprimary,
+    urlcolor=cyanprimary,
+    breaklinks=true,
+    pdftitle={},
+    pdfauthor={},
+    pdfsubject={Cyan Science},
+    pdfkeywords={},
+    pdfproducer={Cyan Science},
+    pdfcreator={LaTeX}
+}
+
+% Article metadata setup
+\makeatletter
+\def\@articletitle{Article Title}
+\def\@shorttitle{Short Title}
+\def\@articletype{Research Article}
+\def\@submissiondate{\today}
+\def\@acceptancedate{\today}
+\def\@publicationdate{\today}
+\def\@volume{1}
+\def\@issue{1}
+\def\@pages{1-10}
+\def\@articleid{001}
+\def\@articledoi{10.xxxxx/cyan.2024.xxxxx}
+
+\newcommand{\articletitle}[1]{\gdef\@articletitle{#1}}
+\newcommand{\shorttitle}[1]{\gdef\@shorttitle{#1}}
+\newcommand{\articletype}[1]{\gdef\@articletype{#1}}
+\newcommand{\submissiondate}[1]{\gdef\@submissiondate{#1}}
+\newcommand{\acceptancedate}[1]{\gdef\@acceptancedate{#1}}
+\newcommand{\publicationdate}[1]{\gdef\@publicationdate{#1}}
+\newcommand{\volume}[1]{\gdef\@volume{#1}}
+\newcommand{\issue}[1]{\gdef\@issue{#1}}
+\newcommand{\pages}[1]{\gdef\@pages{#1}}
+\newcommand{\articleid}[1]{\gdef\@articleid{#1}}
+\newcommand{\articledoi}[1]{\gdef\@articledoi{#1}}
+\makeatother
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\textcolor{cyangray}{\small\textit{Cyan Science}}}
+\fancyhead[RO]{\textcolor{cyangray}{\small\textit{\@shorttitle}}}
+\fancyfoot[C]{\textcolor{cyangray}{\thepage}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Titles
+\titleformat{\section}
+{\color{cyanprimary}\large\bfseries}
+{\thesection.}{0.5em}{}
+\titleformat{\subsection}
+{\color{cyansecondary}\normalsize\bfseries}
+{\thesubsection.}{0.5em}{}
+
+% Drop cap
+\newcommand{\dropcap}[1]{%
+    \lettrine[lines=3, lhang=0.1, loversize=0.05]{\color{cyanprimary}#1}{}%
+}
+
+% Highlights box
+\newenvironment{highlights}{%
+    \begin{mdframed}[
+        backgroundcolor=cyanlight,
+        linecolor=cyanprimary,
+        linewidth=2pt,
+        leftmargin=0pt,
+        rightmargin=0pt,
+        innertopmargin=10pt,
+        innerbottommargin=10pt,
+        innerleftmargin=15pt,
+        innerrightmargin=15pt
+    ]
+    \textbf{\color{cyanprimary}Highlights}
+    \begin{itemize}
+        \setlength{\itemsep}{3pt}
+}{%
+    \end{itemize}
+    \end{mdframed}
+}
+
+% Pull quote
+\newcommand{\pullquote}[1]{%
+    \begin{center}
+    \begin{mdframed}[
+        backgroundcolor=white,
+        linecolor=cyanprimary,
+        linewidth=3pt,
+        leftline=true,
+        rightline=false,
+        topline=false,
+        bottomline=false,
+        leftmargin=2cm,
+        rightmargin=2cm,
+        innerleftmargin=15pt,
+        innerrightmargin=15pt,
+        innertopmargin=10pt,
+        innerbottommargin=10pt
+    ]
+    \Large\textit{\color{cyansecondary}#1}
+    \end{mdframed}
+    \end{center}
+}
+
+% Journal header
+\makeatletter
+\newcommand{\journalheader}{%
+    \begin{center}
+        {\Huge\textbf{\color{cyanprimary}Cyan Science}}\\[0.3cm]
+        {\large\textit{An Interdisciplinary Peer-Reviewed Journal}}\\[0.5cm]
+        \textcolor{cyangray}{\rule{\textwidth}{1pt}}\\[0.3cm]
+        {\small\textbf{\@articletype} | Volume \@volume, Issue \@issue | \@publicationdate}\\[0.2cm]
+        {\small DOI: \href{https://doi.org/\@articledoi}{\@articledoi}}
+    \end{center}
+    \vspace{1cm}
+}
+\makeatother
+
+% Abstract
+\renewenvironment{abstract}{%
+    \small
+    \begin{center}
+        \textbf{\color{cyanprimary}Abstract}
+    \end{center}
+    \quotation\noindent
+}{%
+    \endquotation
+}
+
+% Keywords
+\newenvironment{keywords}{%
+    \small\textbf{\color{cyanprimary}Keywords:}\ 
+}{%
+    \par\vspace{0.5cm}
+}
+
+% Article information footer
+\makeatletter
+\newcommand{\articleinfo}{%
+    \vspace{1cm}
+    \hrule
+    \vspace{0.3cm}
+    {\small
+    \textbf{Article Information}\\
+    Submitted: \@submissiondate\\
+    Accepted: \@acceptancedate\\
+    Published: \@publicationdate\\
+    Article ID: \@articleid\\
+    
+    \textbf{Citation:} [Author(s)]. \@articletitle. \textit{Cyan Science}. \@publicationdate;\@volume(\@issue):\@pages. doi:\@articledoi\\
+    
+    \textbf{Copyright:} \textcopyright\ \the\year\ The Authors. This is an open access article distributed under the terms of the Creative Commons Attribution License.
+    }
+}
+\makeatother
+
+% Bibliography style
+\bibliographystyle{plainnat}
+
+% Disable ligatures for better text processing
+\DisableLigatures{encoding = *, family = *}
+
+% ==============================
+% DOCUMENT BEGINS HERE (EXAMPLE)
+% ==============================
+\begin{document}
+
+% Metadata
+\articletitle{Your Article Title Here}
+\shorttitle{Short Title}
+\articletype{Research Article}
+\submissiondate{2024-01-01}
+\acceptancedate{2024-02-01}
+\publicationdate{2024-03-01}
+\volume{1}
+\issue{1}
+\pages{1--10}
+\articleid{12345}
+\articledoi{10.xxxxx/cyan.2024.xxxxx}
+
+% \linenumbers % for review
+
+% Header
+\journalheader
+
+% Title
+\makeatletter
+\title{\textbf{\color{cyanprimary}\@articletitle}}
+\makeatother
+
+% Authors with affiliations + ORCID logos next to names (linked)
+\author[1]{First Author\,\orcidlink{0000-0000-0000-0000}\thanks{Corresponding author: first.author@university.edu}}
+\author[2]{Second Author\,\orcidlink{0000-0000-0000-0001}}
+\author[1,3]{Third Author\,\orcidlink{0000-0000-0000-0002}}
+
+\affil[1]{Department of Science, University Name, City, Country}
+\affil[2]{Institute of Research, Institution Name, City, Country}
+\affil[3]{Center for Excellence, Another Institution, City, Country}
+
+\date{}
+\maketitle
+
+% Optional compact ORCID list (recommended if journal wants IDs enumerated)
+\begin{center}
+\small
+First Author: \orcidlinkc{0000-0000-0000-0000}\\
+Second Author: \orcidlinkc{0000-0000-0000-0001}\\
+Third Author: \orcidlinkc{0000-0000-0000-0002}
+\end{center}
+
+\vspace{0.5cm}
+
+% Abstract
+\begin{abstract}
+This is the abstract of your research article. It should provide a concise summary of the background, methods, results, and conclusions of your study.
+\end{abstract}
+
+% Keywords
+\begin{keywords}
+keyword1, keyword2, keyword3, interdisciplinary research, methodology
+\end{keywords}
+
+% Highlights
+\begin{highlights}
+\item Key finding or contribution of the research
+\item Novel methodology or approach introduced
+\item Significant implications for the field
+\item Important practical applications
+\item Future research directions identified
+\end{highlights}
+
+\section{Introduction}
+\dropcap{T}he field of interdisciplinary science continues to evolve rapidly, presenting new challenges and opportunities for researchers across diverse domains.
+
+\pullquote{Interdisciplinary research represents the future of scientific discovery, breaking down traditional barriers between fields.}
+
+\section{Methods}
+Describe your methodology in sufficient detail to allow replication.
+
+\section{Results}
+Present your findings clearly and objectively.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ggplot_figure.pdf}
+    \caption{Distribution of sample measurements across experimental conditions.}
+    \label{fig:example}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \caption{Summary statistics for experimental groups showing mean $\pm$ standard deviation.}
+    \label{tab:example}
+    \begin{tabular}{@{}lccc@{}}
+    \toprule
+    \textbf{Treatment Group} & \textbf{Sample Size} & \textbf{Mean Response} & \textbf{95\% CI} \\
+    \midrule
+    Control & 50 & 10.5 $\pm$ 2.3 & [9.8, 11.2] \\
+    Treatment A & 50 & 12.3 $\pm$ 1.8 & [11.8, 12.8] \\
+    Treatment B & 50 & 9.1 $\pm$ 2.1 & [8.5, 9.7] \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{Discussion}
+Interpret your results in the context of existing literature.
+
+\section{Conclusions}
+Summarize the key findings and their significance.
+
+\section*{Acknowledgments}
+Acknowledge funding sources and contributions.
+
+\section*{Funding}
+This research was supported by [Grant Agency] [Grant Number].
+
+\section*{Conflicts of Interest}
+The authors declare no conflicts of interest.
+
+\section*{Data Availability Statement}
+Data are available upon reasonable request.
+
+\begin{thebibliography}{99}
+\bibitem{author2023}
+Author, A. (2023). Example research article. \textit{Example Journal}, 1(1), 1-10.
+\end{thebibliography}
+
+\articleinfo
+
+% ==============================
+% ggplot2 FIGURE NOTES (updated)
+% ==============================
+% theme_minimal() + 
+% theme(
+%   text = element_text(family = "Source Sans Pro", size = 10),
+%   plot.title = element_text(size = 12, face = "bold"),
+%   axis.title = element_text(size = 10, face = "bold"),
+%   axis.text = element_text(size = 9),
+%   legend.text = element_text(size = 9),
+%   legend.title = element_text(size = 10, face = "bold"),
+%   panel.grid.minor = element_blank(),
+%   panel.border = element_rect(fill = NA, color = "grey20", size = 0.5)
+% )
+% Palette: c("#0096AF", "#006479", "#4DB8CC", "#80CDD9", "#B3E0E6")
+% ggsave("figure.pdf", width = 6.5, height = 4, units = "in", dpi = 300)
+
+\end{document}
